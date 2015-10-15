@@ -1,0 +1,60 @@
+ <{extends file="<{$tempdir}>/public/site.html"}>   
+ 
+ <{block name=sitetitle}>用户登陆<{/block}>
+ <{block name=extendcss}><link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/css/memberlogin.css"><{/block}>
+<{block name=shophide}><{/block}>
+<{block name=bgshow}><{/block}>
+ <{block name=bodylist}>  
+ <div class="new_login">
+ 	 <div style="height:40px;"></div>
+   <div class="mem_login">
+   	    <div class="mem_login_form">  
+   	   	<form id="loginForm" method="post" action="<{ofunc type=url link="/member/login"}>">
+   	   		<div class="mem_login_inputdiv">  
+   	   		  	   <input type="text" placeholder="请输入用户名/邮箱" name="uname" >  
+   	   	  </div>
+   	   		<div class="mem_login_inputdiv">  
+   	   		  	   <input type="password" placeholder="请输入密码" name="pwd" >  
+   	   	  </div>
+   	     <{if $allowedcode == 1}>
+   	   	  <div class="mem_login_inputdiv">  
+   	   		  	   <input type="text" placeholder="验证码" name="Captcha" style="width:50px;" >  <img src="<{ofunc type=url link="/site/getCaptcha"}>" id="captchaimg" style="height:24px;"><a href="javascript:freshcode();" >刷新图片</a>
+   	   	  </div>
+   	   	   <{/if}>
+   	   	    <div class="mem_login_inputdiv">  
+   	   	    	<input name="LoginForm[rememberMe]" value="1"   type="checkbox" checked="" style="width:14px;line-height: 14px;height: 14px;">三十天内自动登录 
+   	   	      <a href="<{ofunc type=url link="/member/findpwd"}>" style="padding-left: 90px;font-weight: bold;color: #51b2e9;">找回密码?</a>
+   	   	    </div>
+   	   	    <div class="mem_login_inputdiv" style="text-align:center;padding-top:30px;padding-bottom:15px;">  
+   	   	    	<span class="button_new_login login-button">登陆</span>
+   	   	    </div>
+   	   	    
+   	   	     <div class="mem_login_inputdiv">  
+   	   	    <{load_data assign="apiloginlist" table="otherlogin"  fileds="*"  limit="10" }> 
+					 <{if count($apiloginlist['list']) > 0}>
+				 
+						<{foreach from=$apiloginlist['list'] item=items}>
+						     <a href="<{ofunc type=url link="/member/linktest/logintype/<{$items['loginname']}>"}>" target="_blank"><img src="<{$items['logourl']}>"></a> 
+						<{/foreach}>
+				 
+					 <{/if}>
+   	   	    </div>
+   	   	       <div class="mem_login_inputdiv" style="text-align:center;">  
+   	   	       	 没有帐号？<a href="<{ofunc type=url link="/member/regester"}>" style="font-weight: bold;color: #51b2e9;">立即注册</a>
+   	   	      </div>
+   	   	    
+   	   	</form>
+   	   	</div>
+   </div>
+</div>
+ 
+ 
+ 
+  
+<script type="text/javascript">
+	$('.login-button').click(function(){
+		$('#loginForm').submit();
+	})
+</script>
+ 
+<{/block}>

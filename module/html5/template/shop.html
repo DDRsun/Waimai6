@@ -1,0 +1,108 @@
+ <{extends file="<{$tempdir}>/public/html5.html"}>  
+<{block name=extendcss}> 
+<link rel="stylesheet"  href="<{$siteurl}>/templates/<{$tempdir}>/public/html5/css/goodslist.css">   
+<{/block}>
+ <{block name=extendjs}> 
+ 	<script src="<{$siteurl}>/templates/<{$tempdir}>/public/html5/js/cart.js"></script> 
+ <script>
+ 	$(function(){ 
+ 		$('.sortbox li').bind("click", function() {   
+	    $(this).addClass('hv').siblings().removeClass('hv');
+	    var typeid = $(this).attr('dataid');
+	     if(typeid !== undefined){ 
+	        $.each($('#scrollLoading').find('li'), function(i,val){  
+	      	  if($(val).attr('data-categoryid') == typeid){
+	      	   $(val).show();
+	         	}else{
+	      	   $(val).hide();
+	         	} 
+          });   
+	     }
+    });
+    $('.sortbox li').eq(0).trigger('click');
+    $('.clkitm').bind("click", function() {   
+	      $('#loading').show();
+	    
+	       var gid = $(this).attr('data-supplierdishid'); 
+	       var tempshopid = $(this).attr('data-shopid');
+	       addonedish(gid,tempshopid,1,this);
+	      //  var url = siteurl+'/index.php?controller=html5&action=addcart&goods_id='+gid+'&shopid='+shopid+'&num=1&random=@random@';
+	      //   url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+	      //  $.getScript(url);
+	   
+    });
+    $('#addShopping').bind("click",function(){ 
+    	window.location.href=siteurl+"/index.php?controller=html5&action=buycart&id=<{$id}>";
+    });
+    freshcart();
+ 	});
+ 	var shopid = '<{$id}>';
+ 	var shoplimitcost = '<{$shopinfo['limitcost']}>';
+ 	</script>
+<{/block}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}> 
+ <div id="takeout"> 
+  	<header><div class="return"></div><a href="<{$siteurl}>/index.php?controller=html5&action=shopshow&id=<{$id}>"><{$shopinfo['shopname']}></a></header> 
+  	<div class="wm-container"> 
+  		<div style="display:block;" id="shopinfo"> 
+  		</div> 
+  		   <section>
+
+  		   	   <div class="sortbox" style="height:905px;"> 
+  		   	   	    <ul> 
+  		   	   	    	  <{load_data assign="list" table="goodstype" where="shopid='<{$id}>'" fileds="*"  limit="20" }>  
+  		   	   	    	  <{foreach from=$list['list'] item=items}>
+                       <li id="cp_<{$items['id']}>" dataid="<{$items['id']}>"><{$items['name']}></li>
+                       <{/foreach}>
+                       
+  		   	   	    </ul> 
+  		   	   </div>
+
+  		   	   <div class="listbox" id="scrollLoading"  style="height:905px;">
+
+  		   	   	   <ul class="mVer w100w" style="display: -webkit-box;">  
+  		   	   	   	<{foreach from=$list['list'] item=items}>
+  		   	   	   	<{load_data assign="menulist" table="goods" where="shopid='<{$id}>' and typeid='<{$items['id']}>'" fileds="*"  limit="100" }>  
+  		   	   	      	<{foreach from=$menulist['list'] item=itv}>
+  		   	   	   	    <li class="mBxMid clkitm"  id="gid_<{$itv['id']}>" data-shopid="<{$itv['shopid']}>" data-categoryid="<{$itv['typeid']}>" data-categoryname="<{$itv['name']}>" data-supplierdishid="<{$itv['id']}>" data-supplierdishname="<{$itv['name']}>" data-packagingfee="<{$itv['bagcost']}>" data-price="<{$itv['cost']}>" data-recipe="<{$itv['instro']}>" buydata="0">
+ 
+  		   	   	   		<div class="mBxCm listnumber" style="">
+
+  		   	   	   			<span class="listshu mBxCm">0</span>
+
+  		   	   	   		</div>
+
+  		   	   	   		<div class="mFlex1">
+
+  		   	   	   			<h3><strong><{$itv['name']}></strong></h3>
+
+  		   	   	   			<div><span><{$itv['cost']}></span>元/份</div>
+
+  		   	   	   		</div>
+
+  		   	   	   		<div> 
+  		   	   	   			<{if !empty($itv['img'])}>
+  		   	   	   		    	<img class="scrollLoading" alt="" src="<{$itv['img']}>">  
+  		   	   	   		   <{/if}>
+  		   	   	   		</div> 
+                    </li>  
+                    <{/foreach}>
+  		   	   	   	<{/foreach}>
+  		   	   	   	
+  		   	   	   	
+  		   	   	   	
+  		   	   	   	
+
+  		   	   	  </ul>
+
+  		   	   </div> 
+  		  </section>
+
+<{/block}>
+<{block name=footer}> 
+ </div> 
+  </div> 
+  <footer><div><div class="pie"><span id="buy-DishCaiCount">0</span>个菜，<span id="buy-paycount">0.00</span>元 <span id="shoplimitcost"></span></div><div id="addShopping"><b></b>选好了</div></div></footer>
+ 
+<{/block}>
